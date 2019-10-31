@@ -252,22 +252,6 @@ module SeasonModule
     games_by_season_team = games_in_season.find_all {|game| game.team_id == teamid}
   end
 
-  def accuracy_by_team(season)
-    by_team = Hash.new
-
-    teams.each do |team|
-      by_team[team.team_id] = self.find_games_in_season_team(team.team_id, season)
-    end
-    avg_by_team = by_team.transform_values do |games_t|
-      total_by_game = games_t.map {|game| game.goals.to_f / game.shots}.reduce do |sum, avg|
-        sum + avg
-      end
-      total_by_game / games_t.length
-    end
-    avg_by_team
-  end
-
-
 
 
 

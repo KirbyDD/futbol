@@ -39,7 +39,7 @@ class SeasonModuleTest < Minitest::Test
   end
 
   def test_most_accurate_team
-    assert_equal 'Atlanta United', @stat_tracker_2.most_accurate_team('20122013')
+    assert_equal 'Seattle Sounders FC', @stat_tracker_2.most_accurate_team('20122013')
   end
 
   def test_least_accurate_team
@@ -53,10 +53,5 @@ class SeasonModuleTest < Minitest::Test
   def test_fewest_tackles
     assert_equal 'Atlanta United', @stat_tracker.fewest_tackles('20132014')
   end
-
-  def test_accuracy_by_team
-    assert_equal 'test', @stat_tracker_2.accuracy_by_team('20122013')
-  end
-
 
 end

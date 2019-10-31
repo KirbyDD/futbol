@@ -102,9 +102,28 @@ module SeasonModule
     self.find_coach(best_team.team_id, season)
   end
 
-  def worst_coach(season)
-    worst_team = self.team_records_by_season(season).compact.min_by {|team, record| record}[0]
-    self.find_coach(worst_team.team_id, season)
+  def worst_coach(season_id)
+    games_in_season = games.find_all { |game| game.season == season_id }
+    games_arr = games_in_season.map { |game| game.game_id }
+
+    hash = game_teams.reduce({}) do |acc, game_team|
+        acc[game_team.head_coach] = { :wins => 0, :games_total => 0 }
+        acc
+    end
+
+    game_teams.map do |game_team|
+      if games_arr.include?(game_team.game_id)
+        hash[game_team.head_coach][:wins] += game_team.result == "WIN" ? 1 : 0
+        hash[game_team.head_coach][:games_total] += 1
+      end
+    end
+
+    win_stats = hash.reduce({}) do |acc, (k, v)|
+      acc[k] = v[:games_total] == 0 ? nil : (v[:wins].to_f / v[:games_total].to_f).round(3)
+      acc
+    end
+
+    win_stats.compact.sort_by { |k, v| v }.first.first
   end
 
   def most_accurate_team(season)
@@ -157,6 +176,17 @@ module SeasonModule
     convert_ids_to_team_name(id)
   end
 
+
+
+
+
+
+
+
+
+
+
+
   #HELPER METHODS
 
   def team_records_by_season(season)
@@ -177,14 +207,14 @@ module SeasonModule
   def find_games_in_season_team(teamid, season)
     games_in_season = game_teams.find_all do |g|
       self.find_season_game_id(g.game_id) == season
-      #binding.pry
+      #
     end
     games_by_season_team = games_in_season.find_all {|game| game.team_id == teamid}
   end
 
   def accuracy_by_team(season)
     by_team = Hash.new
-    binding.pry
+
     teams.each do |team|
       by_team[team.team_id] = self.find_games_in_season_team(team.team_id, season)
     end
@@ -196,4 +226,9 @@ module SeasonModule
     end
     avg_by_team
   end
+
+
+
+
+
 end

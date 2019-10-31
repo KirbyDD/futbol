@@ -28,7 +28,7 @@ class TeamModuleTest < Minitest::Test
   end
 
   def test_worst_season
-    assert_equal '20122013', @stat_tracker.best_season('2')
+    assert_equal '20122013', @stat_tracker.worst_season('2')
   end
 
   def test_avg_win_percentage
@@ -56,7 +56,7 @@ class TeamModuleTest < Minitest::Test
   end
 
   def test_worst_loss
-    assert_equal 2, @stat_tracker_2.biggest_team_blowout("3")
+    assert_equal 2, @stat_tracker_2.worst_loss("3")
   end
 
   def test_head_to_head

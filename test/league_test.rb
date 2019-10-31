@@ -60,4 +60,7 @@ class LeagueModuleTest < Minitest::Test
     assert_equal ["Atlanta United"], @stat_tracker.worst_fans
   end
 
+  def test_convert_ids_to_team_name
+    assert_equal "Houston Dynamo", @stat_tracker.convert_ids_to_team_name("3")
+  end
 end

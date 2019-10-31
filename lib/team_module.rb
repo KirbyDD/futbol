@@ -88,6 +88,29 @@ module TeamModule
     convert_ids_to_team_name(id)
   end
 
+  def biggest_team_blowout id
+    result = []
+    games.each do |game|
+      if game.away_team_id == id && game.away_goals > game.home_goals
+        result << game.away_goals - game.home_goals
+      elsif game.home_team_id == id && game.away_goals < game.home_goals
+        result << game.home_goals - game.away_goals
+      end
+    end
+    result.max
+  end
+
+  def worst_loss id
+    result = []
+    games.each do |game|
+      if game.away_team_id == id && game.away_goals < game.home_goals
+        result << game.home_goals - game.away_goals
+      elsif game.home_team_id == id && game.away_goals > game.home_goals
+        result << game.away_goals - game.home_goals
+      end
+    end
+    result.max
+  end
 
 
  #HELPER METHODS

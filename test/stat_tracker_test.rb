@@ -49,7 +49,7 @@ class StatTrackerTest < Minitest::Test
     assert_equal ('REG'), @stat_tracker.game_teams.first.settled_in
     assert_equal ('Peter DeBoer'), @stat_tracker.game_teams.first.head_coach
     assert_equal (2), @stat_tracker.game_teams.first.goals
-    assert_equal ('7'), @stat_tracker.game_teams.first.shots
+    assert_equal (7), @stat_tracker.game_teams.first.shots
     assert_equal ('23'), @stat_tracker.game_teams.first.tackles
     assert_equal ('8'), @stat_tracker.game_teams.first.pim
     assert_equal ('2'), @stat_tracker.game_teams.first.power_play_opportunities

@@ -4,11 +4,11 @@ module TeamModule
   def team_info(team)
     team_obj = self.convert_team_id_to_obj(team)
     team_info = {
-      Name: team_obj.teamname,
-      Team_id: team_obj.team_id,
-      Franchise_id: team_obj.franchiseid,
-      Abbreviation: team_obj.abbreviation,
-      Link: team_obj.link
+      team_name: team_obj.teamname,
+      team_id: team_obj.team_id,
+      franchise_id: team_obj.franchiseid,
+      abbreviation: team_obj.abbreviation,
+      aink: team_obj.link
     }
     team_info
   end
@@ -23,7 +23,7 @@ module TeamModule
 
   def average_win_percentage(team)
     values = self.generate_win_percentage_season(team).values
-    values.reduce {|sum, num| sum + num}.to_f / values.length
+    (values.reduce {|sum, num| sum + num}.to_f / values.length).round(2)
   end
 
   def most_goals_scored(team_lookup)
@@ -126,11 +126,14 @@ module TeamModule
   end
 
   def generate_win_percentage_season(team)
+    #binding.pry
      team_obj = self.convert_team_id_to_obj(team)
      games_by_team = game_teams.group_by {|game| game.team_id}
+     #binding.pry
      by_season = games_by_team[team_obj.team_id].group_by do |game|
        season = find_season_game_id(game.game_id)
      end
+     #binding.pry
      win_percent_season = by_season.transform_values do |val|
        (val.map {|game| game.result == 'WIN' ? 1 : 0}.reduce {|sum, num| sum + num}.to_f / val.length).round(2)
      end
@@ -142,7 +145,9 @@ module TeamModule
   end
 
   def find_season_game_id(gameid)
-    game = games.find {|game| game.game_id == gameid}
+    #binding.pry
+    game = games.find {|gm| gm.game_id == gameid}
+    #binding.pry
     game.season
   end
 end

@@ -54,5 +54,9 @@ class SeasonModuleTest < Minitest::Test
     assert_equal 'Atlanta United', @stat_tracker.fewest_tackles('20132014')
   end
 
+  def test_accuracy_by_team
+    assert_equal 'test', @stat_tracker_2.accuracy_by_team('20122013')
+  end
+
 
 end

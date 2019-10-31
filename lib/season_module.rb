@@ -98,22 +98,22 @@ module SeasonModule
   end
 
   def winningest_coach(season)
-    best_team = self.team_records_by_season(season).max_by {|team, record| record}[0]
+    best_team = self.team_records_by_season(season).compact.max_by {|team, record| record}[0]
     self.find_coach(best_team.team_id, season)
   end
 
   def worst_coach(season)
-    worst_team = self.team_records_by_season(season).min_by {|team, record| record}[0]
+    worst_team = self.team_records_by_season(season).compact.min_by {|team, record| record}[0]
     self.find_coach(worst_team.team_id, season)
   end
 
   def most_accurate_team(season)
-    id_team = self.accuracy_by_team(season).max_by{|team, avg| avg}[0]
+    id_team = self.accuracy_by_team(season).compact.max_by{|team, avg| avg}[0]
     self.convert_ids_to_team_name(id_team)
   end
 
   def least_accurate_team(season)
-    id_team = self.accuracy_by_team(season).min_by{|team, avg| avg}[0]
+    id_team = self.accuracy_by_team(season).compact.min_by{|team, avg| avg}[0]
     self.convert_ids_to_team_name(id_team)
   end
 
@@ -161,8 +161,8 @@ module SeasonModule
 
   def team_records_by_season(season)
     records = Hash.new
-    win_percent_season = teams.collect do |team|
-      records[team] = self.generate_win_percentage_season(team.teamname).select do |sea, team|
+    teams.each do |team|
+      records[team] = self.generate_win_percentage_season(team.team_id).select do |sea, rec|
         sea == season
       end.values[0]
     end
@@ -174,15 +174,17 @@ module SeasonModule
     games_played[0].head_coach
   end
 
-  def find_games_in_season_team(team_id, season)
-    games_in_season = game_teams.find_all do |game|
-      self.find_season_game_id(game.game_id) == season
+  def find_games_in_season_team(teamid, season)
+    games_in_season = game_teams.find_all do |g|
+      self.find_season_game_id(g.game_id) == season
+      #binding.pry
     end
-    games_by_season_team = games_in_season.find_all {|game| game.team_id == team_id}
+    games_by_season_team = games_in_season.find_all {|game| game.team_id == teamid}
   end
 
   def accuracy_by_team(season)
     by_team = Hash.new
+    binding.pry
     teams.each do |team|
       by_team[team.team_id] = self.find_games_in_season_team(team.team_id, season)
     end

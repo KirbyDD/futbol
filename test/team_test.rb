@@ -10,6 +10,12 @@ class TeamModuleTest < Minitest::Test
     game_teams_path = './data/game_teams_fixture.csv'
     locations = { games: game_path, teams: team_path, game_teams: game_teams_path }
     @stat_tracker = StatTracker.from_csv(locations)
+
+    game_path = './data/games_fixture_2.csv'
+    team_path = './data/teams_fixture_2.csv'
+    game_teams_path = './data/game_teams_fixture_2.csv'
+    locations = { games: game_path, teams: team_path, game_teams: game_teams_path }
+    @stat_tracker_2 = StatTracker.from_csv(locations)
   end
 
   def test_team_info
@@ -35,27 +41,27 @@ class TeamModuleTest < Minitest::Test
   end
 
   def test_most_goals_scored
-    assert_equal 6, @stat_tracker.most_goals_scored('1')
+    assert_equal 6, @stat_tracker_2.most_goals_scored('1')
   end
 
   def test_fewest_goals_scored
-    assert_equal 0, @stat_tracker.fewest_goals_scored('2')
+    assert_equal 0, @stat_tracker_2.fewest_goals_scored('2')
   end
 
   def test_favorite_opponent
-    assert_equal "Seattle Sounders FC", @stat_tracker.favorite_opponent('4')
+    assert_equal "Seattle Sounders FC", @stat_tracker_2.favorite_opponent('4')
   end
 
   def test_rival
-    assert_equal "Chicago Fire", @stat_tracker.rival('3')
+    assert_equal "Chicago Fire", @stat_tracker_2.rival('3')
   end
 
   def test_biggest_team_blowout
-    assert_equal 2, @stat_tracker.biggest_team_blowout("3")
+    assert_equal 2, @stat_tracker_2.biggest_team_blowout("3")
   end
 
   def test_worst_loss
-    assert_equal 2, @stat_tracker.biggest_team_blowout("3")
+    assert_equal 2, @stat_tracker_2.biggest_team_blowout("3")
   end
 
   def test_head_to_head

@@ -36,7 +36,7 @@ module LeagueModule
 
     new_hash = team_hash.transform_values {|value| value[:goals] / value[:games]}
     highest_num = new_hash.values.max
-    
+
     teams.find do |team|
       new_hash[team.team_id] == highest_num
     end.teamname
@@ -56,7 +56,7 @@ module LeagueModule
 
     new_hash = team_hash.transform_values {|value| value[:goals] / value[:games]}
     highest_num = new_hash.values.max
-    
+
     teams.find do |team|
       new_hash[team.team_id] == highest_num
     end.teamname
@@ -76,7 +76,7 @@ module LeagueModule
 
     new_hash = team_hash.transform_values {|value| value[:goals] / value[:games]}
     lowest_num = new_hash.values.min
-    
+
     teams.find do |team|
       new_hash[team.team_id] == lowest_num
     end.teamname
@@ -95,7 +95,7 @@ module LeagueModule
 
     new_hash = team_hash.transform_values {|value| value[:goals] / value[:games]}
     lowest_num = new_hash.values.min
-    
+
     teams.find do |team|
       new_hash[team.team_id] == lowest_num
     end.teamname
@@ -187,12 +187,6 @@ module LeagueModule
   def games_played_by_team(id)
     gbt = game_teams.group_by {|game| game.team_id}.transform_values {|val| val.length}
     gbt[id]
-  end
-
-  def empty_team_hash
-    teams_hash = Hash.new
-    teams.each {|team| teams_hash[team.team_id] = 0}
-    teams_hash
   end
 
   def convert_ids_to_team_name(id)

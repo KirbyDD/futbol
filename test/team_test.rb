@@ -5,27 +5,33 @@ require './lib/team_module'
 class TeamModuleTest < Minitest::Test
 
   def setup
-    game_path = './data/games_fixture_2.csv'
-    team_path = './data/teams_fixture_2.csv'
-    game_teams_path = './data/game_teams_fixture_2.csv'
+    game_path = './data/games_fixture.csv'
+    team_path = './data/teams_fixture.csv'
+    game_teams_path = './data/game_teams_fixture.csv'
     locations = { games: game_path, teams: team_path, game_teams: game_teams_path }
     @stat_tracker = StatTracker.from_csv(locations)
   end
 
   def test_team_info
-    skip
+    team = {Name: 'Atlanta United',
+      Team_id: '1',
+      Franchise_id: '23',
+      Abbreviation: 'ATL',
+      Link: '/api/v1/teams/1'
+    }
+    assert_equal team, @stat_tracker.team_info('1')
   end
 
   def test_best_season
-    skip
+    assert_equal '20122013', @stat_tracker.best_season('2')
   end
 
   def test_worst_season
-    skip
+    assert_equal '20122013', @stat_tracker.best_season('2')
   end
 
-  def test_average_win_percentage
-    skip
+  def test_avg_win_percentage
+    assert_equal 0.43, @stat_tracker.average_win_percentage('2')
   end
 
   def test_most_goals_scored

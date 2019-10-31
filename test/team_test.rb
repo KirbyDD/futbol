@@ -51,11 +51,11 @@ class TeamModuleTest < Minitest::Test
   end
 
   def test_biggest_team_blowout
-    skip
+    assert_equal 2, @stat_tracker.biggest_team_blowout("3")
   end
 
   def test_worst_loss
-    skip
+    assert_equal 2, @stat_tracker.biggest_team_blowout("3")
   end
 
   def test_head_to_head

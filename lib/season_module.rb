@@ -99,6 +99,7 @@ module SeasonModule
 
   def winningest_coach(season)
     best_team = self.team_records_by_season(season).max_by {|team, record| record}[0]
+    binding.pry
     self.find_coach(best_team.team_id, season)
   end
 
@@ -162,36 +163,49 @@ module SeasonModule
   def team_records_by_season(season)
     records = Hash.new
     win_percent_season = teams.collect do |team|
-      records[team] = self.generate_win_percentage_season(team.teamname).select do |sea, team|
+      records[team] = self.generate_win_percentage_season(team.team_id).select do |sea, team|
         sea == season
       end.values[0]
     end
     records
+    #binding.pry
   end
 
   def find_coach(team_id, season)
     games_played = self.find_games_in_season_team(team_id, season)
+    binding.pry
     games_played[0].head_coach
   end
 
-  def find_games_in_season_team(team_id, season)
-    games_in_season = game_teams.find_all do |game|
-      self.find_season_game_id(game.game_id) == season
+  def find_games_in_season_team(teamid, season)
+    games_in_season = game_teams.find_all do |g|
+      self.find_season_game_id(g.game_id) == season
+      binding.pry
     end
-    games_by_season_team = games_in_season.find_all {|game| game.team_id == team_id}
+    games_by_season_team = games_in_season.find_all {|game| game.team_id == teamid}
+    binding.pry
   end
+
+
 
   def accuracy_by_team(season)
     by_team = Hash.new
+    #binding.pry
     teams.each do |team|
       by_team[team.team_id] = self.find_games_in_season_team(team.team_id, season)
+      #binding.pry
     end
+    #binding.pry
     avg_by_team = by_team.transform_values do |games_t|
       total_by_game = games_t.map {|game| game.goals.to_f / game.shots}.reduce do |sum, avg|
         sum + avg
+        #binding.pry
       end
       total_by_game / games_t.length
+
+      #binding.pry
     end
     avg_by_team
+    #binding.pry
   end
 end

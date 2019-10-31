@@ -126,16 +126,6 @@ module SeasonModule
     win_stats.compact.sort_by { |k, v| v }.first.first
   end
 
-  def most_accurate_team(season)
-    id_team = self.accuracy_by_team(season).compact.max_by{|team, avg| avg}[0]
-    self.convert_ids_to_team_name(id_team)
-  end
-
-  def least_accurate_team(season)
-    id_team = self.accuracy_by_team(season).compact.min_by{|team, avg| avg}[0]
-    self.convert_ids_to_team_name(id_team)
-  end
-
   def most_tackles(season_id)
     games_in_season = games.find_all { |game| game.season == season_id }
     games = games_in_season.map { |game| game.game_id }
@@ -179,10 +169,60 @@ module SeasonModule
 
 
 
+  def most_accurate_team(season_id)
+    games_in_season = games.find_all { |game| game.season == season_id }
+    games_arr = games_in_season.map { |game| game.game_id }
+
+    hash = game_teams.reduce({}) do |acc, game_team|
+      if games_arr.include?(game_team.game_id)
+        acc[game_team.team_id] = { :shots => 0, :goals => 0 }
+      end
+      acc
+    end
+
+    game_teams.map do |game_team|
+      if games_arr.include?(game_team.game_id)
+        hash[game_team.team_id][:shots] += game_team.shots.to_i
+        hash[game_team.team_id][:goals] += game_team.goals.to_i
+      end
+    end
+
+    win_stats = hash.reduce({}) do |acc, (k, v)|
+      acc[k] = (v[:shots].to_f / v[:goals].to_f).round(3)
+      acc
+    end
+
+    id = win_stats.compact.sort_by { |k, v| v }.first.first
+    convert_ids_to_team_name(id)
+  end
 
 
+  def least_accurate_team(season_id)
+    games_in_season = games.find_all { |game| game.season == season_id }
+    games_arr = games_in_season.map { |game| game.game_id }
 
+    hash = game_teams.reduce({}) do |acc, game_team|
+      if games_arr.include?(game_team.game_id)
+        acc[game_team.team_id] = { :shots => 0, :goals => 0 }
+      end
+      acc
+    end
 
+    game_teams.map do |game_team|
+      if games_arr.include?(game_team.game_id)
+        hash[game_team.team_id][:shots] += game_team.shots.to_i
+        hash[game_team.team_id][:goals] += game_team.goals.to_i
+      end
+    end
+
+    win_stats = hash.reduce({}) do |acc, (k, v)|
+      acc[k] = (v[:shots].to_f / v[:goals].to_f).round(3)
+      acc
+    end
+
+    id = win_stats.compact.sort_by { |k, v| v }.last.first
+    convert_ids_to_team_name(id)
+  end
 
 
 

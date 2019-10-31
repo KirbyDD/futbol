@@ -19,12 +19,7 @@ class TeamModuleTest < Minitest::Test
   end
 
   def test_team_info
-    team = {Name: 'Atlanta United',
-      Team_id: '1',
-      Franchise_id: '23',
-      Abbreviation: 'ATL',
-      Link: '/api/v1/teams/1'
-    }
+    team = {"team_name"=>"Atlanta United", "team_id"=>"1", "franchise_id"=>"23", "abbreviation"=>"ATL", "link"=>"/api/v1/teams/1"}
     assert_equal team, @stat_tracker.team_info('1')
   end
 

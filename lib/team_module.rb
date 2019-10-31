@@ -2,7 +2,7 @@ require 'pry'
 module TeamModule
 
   def team_info(team)
-    team_obj = self.convert_team_name_to_obj(team)
+    team_obj = self.convert_team_id_to_obj(team)
     team_info = {
       Name: team_obj.teamname,
       Team_id: team_obj.team_id,
@@ -103,7 +103,7 @@ module TeamModule
   end
 
   def generate_win_percentage_season(team)
-     team_obj = self.convert_team_name_to_obj(team)
+     team_obj = self.convert_team_id_to_obj(team)
      games_by_team = game_teams.group_by {|game| game.team_id}
      by_season = games_by_team[team_obj.team_id].group_by do |game|
        season = find_season_game_id(game.game_id)
@@ -114,8 +114,8 @@ module TeamModule
      win_percent_season
   end
 
-  def convert_team_name_to_obj(team_name)
-    team_obj = teams.select {|team| team.teamname == team_name}[0]
+  def convert_team_id_to_obj(teamid)
+    team_obj = teams.select {|team| team.team_id == teamid}[0]
   end
 
   def find_season_game_id(gameid)
